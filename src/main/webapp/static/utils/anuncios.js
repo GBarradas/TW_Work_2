@@ -42,3 +42,18 @@ function removeUsernameAlert(){
 function validateNewUserInputs(form){
     return checkPassword();
 }
+
+function changeAba(a) {
+    if (a.classList.contains('active'))
+        return false;
+    let act = document.querySelector('.aba-content.active');
+    let actp = document.querySelector('.aba-option.active');
+    for (n of document.querySelectorAll('.aba-content')) {
+        if (n != act) {
+            n.classList.add('active');
+        }
+    }
+    actp.classList.remove('active');
+    act.classList.remove('active');
+    a.classList.add('active');
+}

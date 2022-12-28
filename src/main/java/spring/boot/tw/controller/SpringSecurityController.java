@@ -153,13 +153,10 @@ public class SpringSecurityController
 
     @GetMapping("/submit")
     public String newAnuncio(Model model, HttpServletRequest request){
-        if(request.getUserPrincipal() == null){
-            model.addAttribute("ar_user", "Area Reservada");
-        }
-        else{
-            String username = request.getRemoteUser();
-            model.addAttribute("ar_user", "Ola, "+username);
-        }
+
+        String username = request.getRemoteUser();
+        model.addAttribute("ar_user", "Ola, "+username);
+        model.addAttribute("anunciante",username);
         model.addAttribute("footer", getFooter());
         return "submit";
     }

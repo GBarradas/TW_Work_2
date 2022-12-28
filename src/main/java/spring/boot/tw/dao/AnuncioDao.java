@@ -34,15 +34,15 @@ public class AnuncioDao {
         return anuncios;
     }
     public void saveAnuncio(Anuncio a){
-        String sql = "insert into anuncios(tipo, estado, anunciante, preco, genero, zona, data, tipologia) values('"+
-                a.getTipo()+"', '"+
-                "inativo', '"+
-                a.getAnunciante()+"', '"+
-                a.getPreco()+"', '"+
-                a.getGenero()+"', '"+
-                a.getZona()+"', '"+
-                new Date() +"', '"+3
-                a.getTipologia()+"')");
+        String sql = String.format("insert into anuncios(tipo, estado, anunciante, preco, genero," +
+                " zona, data, tipologia) values('%s', 'inativo', '%s', '%s', '%s', '%s', '%s', '%s')",
+                a.getTipo(),
+                a.getAnunciante(),
+                a.getPreco(),
+                a.getGenero(),
+                a.getZona(),
+                new Date(),
+                a.getTipologia());
         jdbcTemplate.execute(sql);
     }
 }

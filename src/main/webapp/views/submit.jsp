@@ -48,7 +48,7 @@
                 <form class="grid2" action="http://alunos.di.uevora.pt/tweb/t1/registaprocura" method="POST"
                       onsubmit="return submitAnun(this)">
                     <label>Nome:
-                        <input type="text" name="anunciante" required >
+                        <input type="text" name="anunciante" value="${anunciante}" readonly >
                     </label>
                     <label>Genero:
                         <select name="genero" required>
@@ -91,7 +91,8 @@
 
                     <label>
                         Imagem:
-                        <input type="file" name="image" >
+                        <input type="file" name="image"
+                               accept="image/png, image/jpeg">
                     </label>
 
                     <input type="submit" value="Enviar"  >
@@ -102,7 +103,7 @@
                 <form class="grid2" action="http://alunos.di.uevora.pt/tweb/t1/registaoferta" method="POST"
                       onsubmit="return submitAnun(this)">
                     <label> Nome:
-                        <input type="text" name="anunciante" required >
+                        <input type="text" name="anunciante" value="${anunciante}" readonly>
                     </label>
                     <label>Genero:
                         <select name="genero" required>
@@ -146,7 +147,8 @@
                     </label>
                     <label>
                         Imagem:
-                        <input type="file" name="image" >
+                        <input type="file" name="image"
+                        accept="image/png, image/jpeg">
                     </label>
                     <input type="submit" value="Enviar">
                     <input type="reset" value="Limpar">
