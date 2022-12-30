@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.sql.Statement;
 import java.util.Properties;
 
 @Configuration
@@ -32,6 +33,8 @@ public class DatabaseConfig {
 	public JdbcTemplate jdbcTemplate() throws Exception {
 		return new JdbcTemplate(dataSource());
 	}
+
+
 }
 /*
 @Configuration

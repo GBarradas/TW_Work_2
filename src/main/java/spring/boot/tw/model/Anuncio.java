@@ -10,6 +10,7 @@ public class Anuncio
     private String zona;
     private String anunciante;
     private String tipologia;
+    private long contacto;
     private long aid;
     private Date data;
     private Double preco;
@@ -75,6 +76,9 @@ public class Anuncio
     public void setTitulo(String titulo){
         this.titulo = titulo;
     }
+    public void setContacto(long contacto){
+        this.contacto = contacto;
+    }
 
     public String getTipo() {
         return this.tipo;
@@ -87,6 +91,15 @@ public class Anuncio
     }
     public double getPreco() {
         return this.preco;
+    }
+    public String getStringPreco(){
+        String s = null;
+        if (Math.round(preco) != preco) {
+            s = String.format("%.2f", preco);
+        } else {
+            s = String.format("%.0f", preco);
+        }
+        return  s;
     }
     public String getGenero() {
         return this.genero;
@@ -109,21 +122,43 @@ public class Anuncio
     public String getDescricao(){
         return this.descricao;
     }
+    public long getContacto(){
+        return this.contacto;
+    }
 
+    public StringBuilder getHtmlAnuncio(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(
+
+            "<div id=\""+getAid()+"\" class=\"anuncio box\" onclick=\"redirectAnuncio("+getAid()+")\" >" +
+                    "<img src=\"/static/img/default.png\"><div class=\"ainfos\">" +
+                    "<h3>"+getTitulo()+"</h3>" +
+                    "<div><span class=\"descricao\">Tipo de Alojamento : </span><span>"+getTipologia()+"</span></div>" +
+                    "<div><span class=\"descricao\">Genero : </span><span>"+getGenero()+"</span></div>" +
+                    "<div><span class=\"descricao\">Zona : </span><span>"+getZona()+"</span></div>" +
+                    "<div><span class=\"descricao\">Preço : </span><span>"+getStringPreco()+"€</span></div>" +
+                    "<div><span class=\"descricao\">Anunciante : </span><span>"+getAnunciante()+"</span></div><" +
+                    "/div>" +
+                    "</div>"
+        );
+        return sb;
+    }
     @Override
     public String toString(){
         DecimalFormat df = new DecimalFormat("#,##0.00€");
 
         String p = "-------------------------------------------------------\n" +
-                "\t Aid: "+ aid + ":" + titulo+"\n"+
+                "\t Aid: "+ aid +
+                "\t Titulo: " + titulo+"\n"+
                 "\t Tipo: " + tipo + "\n"+
                 "\t Estado: "+ estado + "\n"+
                 "\t Genero: " + genero+   "\n"+
                 "\t Zona: " + zona + "\n"+
                 "\t Anunciante:  "+ anunciante + "\n"+
+                "\t Contacto: "+ contacto + "\n"+
                 "\t Tipologia: "+ tipologia + "\n"+
                 "\t Data: " + data + "\n"+
-                "\t Preço: "+ df.format(preco) +
+                "\t Preço: "+ df.format(preco) + "\n"+
                 "\t Descrição: "+descricao+"\n";
 
         return p;

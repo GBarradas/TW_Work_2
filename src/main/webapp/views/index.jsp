@@ -8,8 +8,9 @@
 	<meta name="author" content="Gonçalo Barradas, Andre Baião" />
 	<title>NEEI | Portal do Alojamento</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/style.css" >
-	<link rel="icon" href="../static/img/favicon.ico"/>
-	<script src="../static/utils/anuncios.js"></script>
+	<link rel="icon" href="/static/img/favicon.ico"/>
+	<script src="/static/utils/anuncios.js"></script>
+	<script src="https://kit.fontawesome.com/b870a66f93.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -38,10 +39,11 @@
 </header>
 <!--Considerar main em vez de div id="main"-->
 <div id="main">
+	${sucess}
 	<h1>Oferta </h1>
-	<div id="desOferta" class="grid3" ></div>
+	<div id="desOferta" class="grid3" >${fpOferta}</div>
 	<h1>Procura</h1>
-	<div id="desProcura" class="grid3"></div>
+	<div id="desProcura" class="grid3">${fpProcura}</div>
 </div>
 <footer>
 	${footer}

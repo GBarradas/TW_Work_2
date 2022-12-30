@@ -45,10 +45,11 @@
         </div>
         <div class="content-wraper"  >
             <div class="aba-content active">
-                <form class="grid2" action="http://alunos.di.uevora.pt/tweb/t1/registaprocura" method="POST"
-                      onsubmit="return submitAnun(this)">
-                    <label>Nome:
-                        <input type="text" name="anunciante" value="${anunciante}" readonly >
+                <form class="grid2" action="/registerProcura" method="POST"
+                      onsubmit="return submitAnun(this)"
+                      enctype="multipart/form-data" >
+                    <label>Titulo:
+                        <input type="text" name="titulo" required >
                     </label>
                     <label>Genero:
                         <select name="genero" required>
@@ -92,7 +93,7 @@
                     <label>
                         Imagem:
                         <input type="file" name="image"
-                               accept="image/png, image/jpeg">
+                               accept="image/png, image/jpeg" >
                     </label>
 
                     <input type="submit" value="Enviar"  >
@@ -100,14 +101,16 @@
                 </form>
             </div>
             <div class="aba-content">
-                <form class="grid2" action="http://alunos.di.uevora.pt/tweb/t1/registaoferta" method="POST"
-                      onsubmit="return submitAnun(this)">
-                    <label> Nome:
-                        <input type="text" name="anunciante" value="${anunciante}" readonly>
+                <form class="grid2" action="/registerOferta" method="POST"
+                      onsubmit="return submitAnun(this)"
+                      enctype="multipart/form-data" >
+                    <label> Titulo:
+                        <input type="text" name="titulo" required>
                     </label>
                     <label>Genero:
                         <select name="genero" required>
                             <option></option>
+                            <option>Individual</option>
                             <option>Masculino</option>
                             <option>Feminino</option>
                             <option>Casal</option>
@@ -128,8 +131,8 @@
                                 <option>T6</option>
                             </optgroup>
                             <optgroup label="Quartos">
-                                <option>Individual</option>
-                                <option>Duplo</option>
+                                <option value="Quarto Individual">Individual</option>
+                                <option value="Quarto Duplo" >Duplo</option>
                             </optgroup>
                         </select>
                     </label>
@@ -148,7 +151,7 @@
                     <label>
                         Imagem:
                         <input type="file" name="image"
-                        accept="image/png, image/jpeg">
+                        accept="image/png, image/jpeg" >
                     </label>
                     <input type="submit" value="Enviar">
                     <input type="reset" value="Limpar">

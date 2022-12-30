@@ -1,3 +1,5 @@
+import ("https://kit.fontawesome.com/b870a66f93.js")
+
 function showHide(a){
     a.classList.toggle("change");
     document.getElementById('options').classList.toggle('active')
@@ -56,4 +58,8 @@ function changeAba(a) {
     actp.classList.remove('active');
     act.classList.remove('active');
     a.classList.add('active');
+}
+
+function redirectAnuncio(aid){
+    window.location.href = '/anuncio?aid='+aid;
 }

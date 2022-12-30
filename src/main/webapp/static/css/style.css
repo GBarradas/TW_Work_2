@@ -28,6 +28,26 @@
 	border-radius: 15px;
 	margin-top: 10px;
 }
+.smaller{
+	font-size: 0.5em;
+	color: #7a7474;
+	word-break: keep-all;
+}
+.smaller2{
+	font-size: 0.75em;
+	color: #7a7474;
+}
+.sucess{
+	width: calc(96% - 2vw);
+	color: #282525;
+	font-size: 1.2em;
+	padding: 15px 2%;
+	background: rgba(64, 255, 0, 0.55);
+	border: 1px solid #003a00;
+	border-radius: 15px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
 
 /*
 * Import's
@@ -386,6 +406,13 @@ footer{
 }
 .anuncio_unico h1{
 	font-size: 3em;
+	margin-bottom: 20px;
+}
+.anuncio_unico hr{
+	clear: both;
+	margin-bottom: 20px;
+	border: 1px black solid;
+
 }
 .anuncio_unico img{
 	float: left;
@@ -545,6 +572,8 @@ input[type=submit],input[type=button],input[type=reset]){
 #msg{
 	clear:both;
 	padding-top: 1%;
+	margin-bottom: 20px;
+	word-break: break-all;
 }
 #msg h2{
 	margin-bottom: 20px ;
@@ -637,6 +666,16 @@ input[type=submit],input[type=button],input[type=reset]){
 }
 
 @media  screen and (max-width: 632px) {
+	#main.anuncio_unico{
+
+		padding-top: calc( var(--nav-height) + 3vh);
+		margin: 0 0;
+
+	}
+	#main.anuncio_unico .anuncio_unico.box{
+		box-shadow: none;
+	}
+
 	#name{
 		display: none;
 	}
@@ -661,6 +700,9 @@ input[type=submit],input[type=button],input[type=reset]){
 	.anuncioAdmin img{
 		max-width: 100%;
 		width: 100%;
+		margin-bottom: 10px;
+	}
+	.ainfos_unico{
 		margin-bottom: 10px;
 	}
 	.ainfos_unico div{

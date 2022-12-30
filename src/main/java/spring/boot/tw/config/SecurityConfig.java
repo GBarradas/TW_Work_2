@@ -29,9 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				/** ADMIN ACCESS **/
 				.antMatchers("/admin").access("hasRole('ADMIN')")
+				.antMatchers("/registerProcura","/registerOferta","/submit","/sendMensagem")
+				.access("hasRole('USER')")
 				/** PUBLIC ACCESS **/
 				.antMatchers("/",  "/login", "/static/**", "/error**", "/newuser"
-						,"/registeruser", "/anuncios")
+						,"/registeruser", "/anuncios","/anuncio**")
 				.permitAll().anyRequest().authenticated()// ,																							// /,login
 				.and()// ,
 				.formLogin()
@@ -41,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.failureUrl("/login?error")
 				.usernameParameter("username")
 				.passwordParameter("password");
+				http.cors().and().csrf().disable();
 	}
 
 	@Bean

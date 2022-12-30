@@ -5,44 +5,135 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import spring.boot.tw.model.Anuncio;
 
+import javax.sql.*;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 @Repository
 public class AnuncioDao {
 
     @Autowired
+    private DataSource dataSource;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Anuncio> getAnunciosByEstado(String estado){
-        List<Map<String,Object>> result = jdbcTemplate.queryForList(
-                "select * from anuncios where estado = '"+estado+"'");
+    public List<Anuncio> getAnunciosByEstado(String estado) throws SQLException {
         List<Anuncio> anuncios = new LinkedList<Anuncio>();
-        for(Map m : result){
+        Statement stmt = dataSource.getConnection().createStatement();
+        ResultSet rs = stmt.executeQuery("select * from anuncios where estado = '"+estado+"'");
+        while(rs.next()) {
             Anuncio a = new Anuncio();
-            a.setAid((Long) m.get("aid"));
-            a.setZona((String) m.get("zona"));
-            a.setPreco((Double) m.get("data"));
-            a.setGenero((String) m.get("genero"));
-            a.setTipologia((String) m.get("tipologia"));
-            a.setTipo((String) m.get("tipo"));
-            a.setData((Date) m.get("data"));
-            a.setAnunciante((String) m.get("anunciante"));
-            a.setDescricao((String) m.get("descricao"));
-            a.setTitulo((String) m.get("titulo"));
+            a.setAid( rs.getLong("aid"));
+            a.setZona(rs.getString("zona"));
+            a.setPreco(rs.getDouble("preco"));
+            a.setGenero(rs.getString("genero"));
+            a.setTipologia(rs.getString("tipologia"));
+            a.setTipo(rs.getString("tipo"));
+            a.setData(rs.getDate("data"));
+            a.setEstado(rs.getString("estado"));
+            a.setAnunciante(rs.getString("anunciante"));
+            a.setDescricao(rs.getString("descricao"));
+            a.setTitulo(rs.getString("titulo"));
+            a.setContacto(rs.getLong("contacto"));
             anuncios.add(a);
         }
         return anuncios;
     }
-    public void saveAnuncio(Anuncio a){
-        String sql = String.format("insert into anuncios(tipo, estado, anunciante, preco, genero," +
-                " zona, data, tipologia) values('%s', 'inativo', '%s', '%s', '%s', '%s', '%s', '%s')",
-                a.getTipo(),
-                a.getAnunciante(),
-                a.getPreco(),
-                a.getGenero(),
-                a.getZona(),
-                new Date(),
-                a.getTipologia());
-        jdbcTemplate.execute(sql);
+
+    public List<Anuncio> get3Anuncios(String tipo) throws SQLException {
+            List<Anuncio> anuncios = new ArrayList<Anuncio>();
+            Statement stmt = dataSource.getConnection().createStatement();
+
+            ResultSet rs = stmt.executeQuery("select * from anuncios where estado = 'ativo' and tipo = '" + tipo + "' ORDER BY data LIMIT 3");
+            while(rs.next()) {
+                Anuncio a = new Anuncio();
+                a.setAid( rs.getLong("aid"));
+                a.setZona(rs.getString("zona"));
+                a.setPreco(rs.getDouble("preco"));
+                a.setGenero(rs.getString("genero"));
+                a.setTipologia(rs.getString("tipologia"));
+                a.setTipo(rs.getString("tipo"));
+                a.setData(rs.getDate("data"));
+                a.setAnunciante(rs.getString("anunciante"));
+                a.setDescricao(rs.getString("descricao"));
+                a.setTitulo(rs.getString("titulo"));
+                a.setEstado(rs.getString("estado"));
+                a.setContacto(rs.getLong("contacto"));
+                anuncios.add(a);
+            }
+            return anuncios;
+    }
+
+    public Anuncio getAnuncio(long aid) throws SQLException {
+        Statement stmt = dataSource.getConnection().createStatement();
+        ResultSet rs = stmt.executeQuery("select * from anuncios where aid="+aid+";");
+       if(rs == null){
+           return null;
+       }
+       else if(rs.next()){
+            Anuncio a = new Anuncio();
+            a.setAid( rs.getLong("aid"));
+            a.setZona(rs.getString("zona"));
+            a.setPreco(rs.getDouble("preco"));
+            a.setGenero(rs.getString("genero"));
+            a.setTipologia(rs.getString("tipologia"));
+            a.setTipo(rs.getString("tipo"));
+            a.setData(rs.getDate("data"));
+            a.setAnunciante(rs.getString("anunciante"));
+            a.setDescricao(rs.getString("descricao"));
+            a.setTitulo(rs.getString("titulo"));
+            a.setEstado(rs.getString("estado"));
+            a.setContacto(rs.getLong("contacto"));
+            return a;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public long saveAnuncio(Anuncio a){
+
+        String sql = "insert into anuncios(tipo, estado, anunciante, preco, genero, zona, data, tipologia,titulo,descricao, contacto) values('"
+                + a.getTipo() +
+                "', 'inativo', '" +
+                a.getAnunciante() +
+                "', '" + a.getPreco() +
+                "', '" + a.getGenero() +
+                "', '" + a.getZona() +
+                "', '" + new Date() +
+                "', '" + a.getTipologia() +
+                "', '" + a.getTitulo() +
+                "','" + a.getDescricao() +
+                "','"+a.getContacto() +
+                "') returning aid";
+
+        long result = jdbcTemplate.queryForObject(sql, Integer.class);
+        return result;
+    }
+
+    public List<Anuncio> getAnunciosFiltro(String filtros) throws Exception
+    {
+        List<Anuncio> anuncios = new ArrayList<Anuncio>();
+        Statement stmt = dataSource.getConnection().createStatement();
+        System.out.println("select * from anuncios where "+filtros +";");
+        ResultSet rs = stmt.executeQuery("select * from anuncios where "+filtros +";");
+        while(rs.next()) {
+            Anuncio a = new Anuncio();
+            a.setAid( rs.getLong("aid"));
+            a.setZona(rs.getString("zona"));
+            a.setPreco(rs.getDouble("preco"));
+            a.setGenero(rs.getString("genero"));
+            a.setTipologia(rs.getString("tipologia"));
+            a.setTipo(rs.getString("tipo"));
+            a.setData(rs.getDate("data"));
+            a.setAnunciante(rs.getString("anunciante"));
+            a.setDescricao(rs.getString("descricao"));
+            a.setTitulo(rs.getString("titulo"));
+            a.setEstado(rs.getString("estado"));
+            a.setContacto(rs.getLong("contacto"));
+            anuncios.add(a);
+        }
+        return anuncios;
     }
 }

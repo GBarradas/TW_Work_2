@@ -1,7 +1,7 @@
-<%@ page language="java" session="true"
-         contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,34 +37,28 @@
         </div>
     </nav>
 </header>
-<div id="main">
-    <div class="container-register box" >
-        <h1>Novo Utilizador</h1>
-
-        <form action="/registeruser" method="POST" name="newUser"
-        onsubmit="return validateNewUserInputs(this)">
-            <img src="/static/img/Logo_NEEI_Sem_Fundo_cortado-svg.svg" alt="logo" >
-            <p id="alerts" ></p>
-            ${msg}
-            <div class="grid2">
-
-
-                <label>username: <input name="username" type="text" value="${username}" oninput="removeUsernameAlert()" required></label>
-                <label>email: <input name="email" type="email" value="${email}" required ></label>
-                <label>Password:<input name="password" type="password" value="${password}" required></label>
-                <label>Confime a Password: <input name="cpass" id="passWord" type="password" oninput="checkPassword()" required ></label>
-
-            <input type="submit" value="Registar">
-            <input type="button" value="Limpar" onclick="cleanValue()">
-            </div>
-
-        </form>
+<!--Considerar main em vez de div id="main"-->
+<div id="main" class="anuncio_unico">
+    <div id="${aid}" class="anuncio_unico box">
+        ${msg}
+        <h1>${titulo}</h1>
+        <div class="ainfos_unico" >
+            <img src="${img_src}" >
+                <div><span class="descricao">Tipo de Alojamento : </span><span>${tipo_alojamento}</span></div>
+                <div><span class="descricao">Genero : </span><span>${genero}</span></div>
+                <div><span class="descricao">Zona : </span><span>${zona}</span></div>
+                <div><span class="descricao">Preço : </span><span>${preco} €</span></div>
+                <div><span class="descricao">Anunciante : </span><span>${anunciante}</span></div>
+                <div><span class="descricao">Contacto : </span><span>${contacto}</span></div>
+                <div><span class="descricao">Detalhes : </span><span>${detalhes}</span></div>
+        </div>
+        ${sendMsg}
+        ${formMsg}
     </div>
-
 </div>
-
 <footer>
     ${footer}
 </footer>
+
 </body>
 </html>

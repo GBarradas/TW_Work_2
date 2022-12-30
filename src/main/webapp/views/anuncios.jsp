@@ -43,11 +43,11 @@
 
     <div id="filtro" class="box" >
         <div id="filtro-controlo" onclick="showFilter(this)" ></div>
-        <h1>Filtrar </h1>
+        <h1>Pesquisar </h1>
         <div id="filOpts" >
             <hr>
             <form id="search-form" name ="search-form" class="grid2"
-                  onsubmit="return filtrarAnuncios(this);" >
+                  onsubmit="" >
                 <div>
                     <label for="tipo" >Tipo de Anuncio: </label><br>
                     <select name="tipo" id="tipo" required>
@@ -98,17 +98,20 @@
 
     </div>
     <div id="results">
-
+        ${Anuncio1}
+        ${Anuncio2}
+        ${Anuncio3}
+        ${Anuncio4}
     </div>
-    <div id="paginacao" class="box" >
-        <div class="pagOpt" id="optfp" >«</div>
-        <div class="pagOpt" id="optpp"><</div>
-        <div class="pagInfo" >
-            Pagina <span id="actpage"></span> de
-            <span id="npages"></span>
+    <div id="paginacao" class="box">
+        <div class="pagOpt" id="optfp" onclick="showPage(1)">«</div>
+        <div class="pagOpt" id="optpp" onclick="showPage(1)">&lt;</div>
+        <div class="pagInfo">
+            Pagina <span id="actpage">${actPage}</span> de
+            <span id="npages">${numPages}</span>
         </div>
-        <div class="pagOpt" id="optnp" > > </div>
-        <div class="pagOpt" id="optlp">»</div>
+        <div class="pagOpt" id="optnp" onclick="showPage(2)"> &gt; </div>
+        <div class="pagOpt" id="optlp" onclick="showPage(3)">»</div>
     </div>
 </div>
 <footer>
