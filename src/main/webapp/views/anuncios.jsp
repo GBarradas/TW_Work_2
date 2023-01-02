@@ -41,16 +41,19 @@
 <!--Considerar main em vez de div id="main"-->
 <div id="main">
 
+
     <div id="filtro" class="box" >
+
         <div id="filtro-controlo" onclick="showFilter(this)" ></div>
         <h1>Pesquisar </h1>
+        <span class="smaller2" > ${ResultNA}</span>
         <div id="filOpts" >
             <hr>
             <form id="search-form" name ="search-form" class="grid2"
-                  onsubmit="" >
+                  action="/anuncios" method="POST" onsubmit="" >
                 <div>
                     <label for="tipo" >Tipo de Anuncio: </label><br>
-                    <select name="tipo" id="tipo" required>
+                    <select name="tipo" id="tipo" value="${tipo}" required>
                         <option></option>
                         <option value="oferta" >Oferta</option>
                         <option value="procura">Procura</option>
@@ -58,16 +61,16 @@
                 </div>
                 <div>
                     <label for="zona" >Zona: </label><br>
-                    <input name="zona" type="text"  id="zona" class="textinp" >
+                    <input name="zona" type="text"  id="zona" class="textinp" value="${zona}" >
 
                 </div>
                 <div>
                     <label for="anunciante" >Anunciante: </label>
-                    <input name="anunciante" id="anunciante" class="textinp" type="text" >
+                    <input name="anunciante" id="anunciante" class="textinp" type="text" value="${anunciante}" >
                 </div>
                 <div>
                     <label for="tipo_alojamento" >Tipo de Alojamento</label>
-                    <select name="tipo_alojamento" id="tipo_alojamento" >
+                    <select name="tipo_alojamento" id="tipo_alojamento" value="${tipologia}" >
                         <option value=""></option>
                         <option value="T0">T0</option>
                         <option value="T1">T1</option>
@@ -82,7 +85,7 @@
                 </div>
                 <div>
                     <label for="genero" >Genero:</label>
-                    <select name="genero" id="genero" >
+                    <select name="genero" id="genero" value="${genero}">
                         <option></option>
                         <option>Masculino</option>
                         <option>Feminino</option>
@@ -98,27 +101,29 @@
 
     </div>
     <div id="results">
-        ${Anuncio1}
-        ${Anuncio2}
-        ${Anuncio3}
-        ${Anuncio4}
+        <div class="page active">
+            ${anuncios}
+        </div>
     </div>
     <div id="paginacao" class="box">
-        <div class="pagOpt" id="optfp" onclick="showPage(1)">«</div>
-        <div class="pagOpt" id="optpp" onclick="showPage(1)">&lt;</div>
+        <div class="pagOpt" id="optfp" onclick="showAnuncioPage(1)">«</div>
+        <div class="pagOpt" id="optpp" onclick="showAnuncioPage(${prevPage})">&lt;</div>
         <div class="pagInfo">
             Pagina <span id="actpage">${actPage}</span> de
-            <span id="npages">${numPages}</span>
+            <span id="npages">${numPages}</span><br>
+
         </div>
-        <div class="pagOpt" id="optnp" onclick="showPage(2)"> &gt; </div>
-        <div class="pagOpt" id="optlp" onclick="showPage(3)">»</div>
+        <div class="pagOpt" id="optnp" onclick="showAnuncioPage(${nextPage})"> &gt; </div>
+        <div class="pagOpt" id="optlp" onclick="showAnuncioPage(${lastPage})">»</div>
     </div>
 </div>
+
 <footer>
     ${footer}
 </footer>
 <script>
 
+    showSelectOptions()
     function showFilter(f){
         f.classList.toggle('active')
         //document.getElementById('search-form').classList.toggle('active')

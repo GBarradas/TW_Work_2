@@ -147,8 +147,8 @@ public class Anuncio
     public String toString(){
         DecimalFormat df = new DecimalFormat("#,##0.00€");
 
-        String p = "-------------------------------------------------------\n" +
-                "\t Aid: "+ aid +
+        String p =/* "-------------------------------------------------------\n" +
+                "\t Aid: "+ */""+ aid /*+
                 "\t Titulo: " + titulo+"\n"+
                 "\t Tipo: " + tipo + "\n"+
                 "\t Estado: "+ estado + "\n"+
@@ -159,7 +159,7 @@ public class Anuncio
                 "\t Tipologia: "+ tipologia + "\n"+
                 "\t Data: " + data + "\n"+
                 "\t Preço: "+ df.format(preco) + "\n"+
-                "\t Descrição: "+descricao+"\n";
+                "\t Descrição: "+descricao+"\n"*/;
 
         return p;
     }

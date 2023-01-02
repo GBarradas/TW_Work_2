@@ -42,6 +42,10 @@ public class SpringSecurityController
     private AnuncioDao anuncioDao;
     @Autowired
     private MensagemDao mensagemDao;
+
+    int pageSize = 4;
+
+    List<Anuncio> PesAnuncios;
     public String getFooter(){
         return "<p id=\"ppatrocinios\">Patrocinios: </p>\n" +
                 "<div id=\"patrocinios\">\n" +
@@ -100,7 +104,7 @@ public class SpringSecurityController
                 return "redirect:/admin";
             }
             else{
-                return "redirect:/";
+                return "redirect:/utilizador";
             }
 
         }
@@ -129,14 +133,16 @@ public class SpringSecurityController
 
     @GetMapping("/anuncios")
     public String AnunciosPage(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "tipo", required = false) String tipo,
-            @RequestParam(name = "zona", required = false) String zona,
-            @RequestParam(name = "anunciante", required = false) String anunciante,
-            @RequestParam(name = "tipo_alojamneto", required = false) String tipologia,
-            @RequestParam(name = "genero", required = false) String genero,
-            Model model, HttpServletRequest request) throws Exception {
-        System.out.println(page+"|"+tipo+"|"+zona+"|"+anunciante+"|"+tipologia+"|"+genero);
+            @RequestParam(defaultValue = "0") int page,
+            Model model, HttpServletRequest request) throws SQLException {
+        System.out.println(PesAnuncios);
+        if(page == 0){
+            PesAnuncios = anuncioDao.getAnunciosByEstado("ativo");
+            return "redirect:/anuncios?page=1";
+        }
+        if(PesAnuncios == null){
+            return "redirect:/anuncios";
+        }
         if(request.getUserPrincipal() == null){
             model.addAttribute("ar_user", "Area Reservada");
         }
@@ -145,6 +151,50 @@ public class SpringSecurityController
             model.addAttribute("ar_user", "Ola, "+username);
         }
         model.addAttribute("footer", getFooter());
+        model.addAttribute("ResultNA","&emsp;"+PesAnuncios.size()+" Anuncios Encontrados!");
+        int npages = (int) Math.ceil((double) PesAnuncios.size()/pageSize);
+        model.addAttribute("actPage",page);
+        model.addAttribute("numPages",npages);
+        int start, end;
+        start = (page - 1)*pageSize;
+        end = (page * pageSize);
+        StringBuilder sbA = new StringBuilder();
+        for(int i = start; i < end && i < PesAnuncios.size(); i++){
+            Anuncio a = PesAnuncios.get(i);
+            sbA.append(a.getHtmlAnuncio());
+        }
+        model.addAttribute("anuncios",sbA);
+        if ((page != 1)) {
+            model.addAttribute("prevPage", page - 1);
+        } else {
+            model.addAttribute("prevPage", 1);
+        }
+        if(page == npages){
+            model.addAttribute("nextPage", npages);
+        }
+        else{
+            model.addAttribute("nextPage", page + 1);
+        }
+        model.addAttribute("lastPage", npages);
+
+        return "anuncios";
+    }
+
+    @PostMapping("/anuncios")
+    public String AnunciosPage(
+            @RequestParam(name = "tipo", required = false) String tipo,
+            @RequestParam(name = "zona", required = false) String zona,
+            @RequestParam(name = "anunciante", required = false) String anunciante,
+            @RequestParam(name = "tipo_alojamneto", required = false) String tipologia,
+            @RequestParam(name = "genero", required = false) String genero,
+            Model model, HttpServletRequest request) throws Exception {
+        if(request.getUserPrincipal() == null){
+            model.addAttribute("ar_user", "Area Reservada");
+        }
+        else{
+            String username = request.getRemoteUser();
+            model.addAttribute("ar_user", "Ola, "+username);
+        }
         String filtros = "estado = 'ativo'";
         if(tipo != null && tipo != ""){
             filtros += "and tipo ilike '"+tipo+"'";
@@ -161,9 +211,8 @@ public class SpringSecurityController
         if(genero != null && genero != ""){
             filtros += "and genero ilike '"+genero+"'";
         }
-        System.out.println(anuncioDao.getAnunciosFiltro(filtros));
-
-        return "anuncios";
+        PesAnuncios=  anuncioDao.getAnunciosFiltro(filtros);
+        return "redirect:/anuncios?page=1";
 
     }
     @GetMapping("/newuser")
@@ -384,6 +433,14 @@ public class SpringSecurityController
         return "redirect:anuncio?mSend&aid="+aid;
     }
 
+    @GetMapping("/utilizador")
+    public String paginaUser(Model model, HttpServletRequest request){
+        String username = request.getRemoteUser();
+        model.addAttribute("ar_user", "Ola, "+username);
+        model.addAttribute("sucess","<h1>"+username+"</h1>");
+        model.addAttribute("footer", getFooter());
+        return "userPage";
+    }
 
 
 

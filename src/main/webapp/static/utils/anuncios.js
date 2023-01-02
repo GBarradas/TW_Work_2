@@ -63,3 +63,12 @@ function changeAba(a) {
 function redirectAnuncio(aid){
     window.location.href = '/anuncio?aid='+aid;
 }
+
+function showAnuncioPage(page){
+    window.location.href = '/anuncios?page='+page;
+}
+
+function showSelectOptions(){
+    let form = document.forms["search-form"];
+    console.log(form["tipo"].value)
+}
