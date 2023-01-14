@@ -35,14 +35,25 @@
         </div>
     </nav>
 </header>
-<div id="main">
+<div id="mainError">
     <h1>ERROR PAGE <br>
     ${h1}
     </h1>
+    ${errorImg}
 </div>
 
 <footer>
-    ${footer}
+    <p id="ppatrocinios">Patrocinios: </p>
+    <div id="patrocinios">
+        <!--Considerar links para as imagens-->
+        <img src="/static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
+        <img src="/static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
+        <img src="/static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
+        <img src="/static/img/dinf_ue.png" alt="Departamento de Informatica UE">
+    </div>
+
+    <hr>
+    <p id="copyright">All content copyright © Gonçalo Barradas and Andre Baião.</p>
 </footer>
 </body>
 </html>

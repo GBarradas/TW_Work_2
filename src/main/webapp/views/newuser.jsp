@@ -31,7 +31,7 @@
                 <ul>
                     <li><a href="/anuncios">Anuncios</a></li>
                     <li><a href="/submit">Fazer Anuncio</a></li>
-                    <li><a href="/login" id="user" >${ar_user}</a></li>
+                    <li><a href="/login" id="user" >Area Reservada</a></li>
                 </ul>
             </div>
         </div>
@@ -64,7 +64,17 @@
 </div>
 
 <footer>
-    ${footer}
+    <p id="ppatrocinios">Patrocinios: </p>
+    <div id="patrocinios">
+        <!--Considerar links para as imagens-->
+        <img src="static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
+        <img src="static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
+        <img src="static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
+        <img src="static/img/dinf_ue.png" alt="Departamento de Informatica UE">
+    </div>
+
+    <hr>
+    <p id="copyright">All content copyright © Gonçalo Barradas and Andre Baião.</p>
 </footer>
 </body>
 </html>

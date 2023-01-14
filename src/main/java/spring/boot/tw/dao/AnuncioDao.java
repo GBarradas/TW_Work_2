@@ -36,6 +36,7 @@ public class AnuncioDao {
             a.setDescricao(rs.getString("descricao"));
             a.setTitulo(rs.getString("titulo"));
             a.setContacto(rs.getLong("contacto"));
+            a.setImg(rs.getString("img"));
             anuncios.add(a);
         }
         return anuncios;
@@ -45,7 +46,7 @@ public class AnuncioDao {
             List<Anuncio> anuncios = new ArrayList<Anuncio>();
             Statement stmt = dataSource.getConnection().createStatement();
 
-            ResultSet rs = stmt.executeQuery("select * from anuncios where estado = 'ativo' and tipo = '" + tipo + "' ORDER BY data LIMIT 3");
+            ResultSet rs = stmt.executeQuery("select * from anuncios where estado = 'ativo' and tipo = '" + tipo + "' ORDER BY data desc LIMIT 3");
             while(rs.next()) {
                 Anuncio a = new Anuncio();
                 a.setAid( rs.getLong("aid"));
@@ -60,6 +61,7 @@ public class AnuncioDao {
                 a.setTitulo(rs.getString("titulo"));
                 a.setEstado(rs.getString("estado"));
                 a.setContacto(rs.getLong("contacto"));
+                a.setImg(rs.getString("img"));
                 anuncios.add(a);
             }
             return anuncios;
@@ -85,6 +87,7 @@ public class AnuncioDao {
             a.setTitulo(rs.getString("titulo"));
             a.setEstado(rs.getString("estado"));
             a.setContacto(rs.getLong("contacto"));
+           a.setImg(rs.getString("img"));
             return a;
         }
         else{
@@ -132,8 +135,14 @@ public class AnuncioDao {
             a.setTitulo(rs.getString("titulo"));
             a.setEstado(rs.getString("estado"));
             a.setContacto(rs.getLong("contacto"));
+            a.setImg(rs.getString("img"));
             anuncios.add(a);
         }
         return anuncios;
+    }
+    public void updateImg(long aid, String dir) throws Exception
+    {
+        Statement stmt = dataSource.getConnection().createStatement();
+        stmt.executeUpdate("update anuncios set img='"+dir+"' where aid = "+aid);
     }
 }

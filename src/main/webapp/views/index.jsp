@@ -43,11 +43,21 @@
 	<h1>Oferta </h1>
 	<div id="desOferta" class="grid3" >${fpOferta}</div>
 	<h1>Procura</h1>
-	<div id="desProcura" class="grid3">${fpProcura}</div>
+		<div id="desProcura" class="grid3">${fpProcura}</div>
 </div>
-<footer>
-	${footer}
-</footer>
+		<footer>
+			<p id="ppatrocinios">Patrocinios: </p>
+			<div id="patrocinios">
+				<!--Considerar links para as imagens-->
+				<img src="static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
+				<img src="static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
+				<img src="static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
+				<img src="static/img/dinf_ue.png" alt="Departamento de Informatica UE">
+			</div>
+
+			<hr>
+			<p id="copyright">All content copyright © Gonçalo Barradas and Andre Baião.</p>
+		</footer>
 
 </body>
 </html>

@@ -50,7 +50,7 @@
         <div id="filOpts" >
             <hr>
             <form id="search-form" name ="search-form" class="grid2"
-                  action="/anuncios" method="POST" onsubmit="" >
+                  action="/anuncios" method="GET" onsubmit="" >
                 <div>
                     <label for="tipo" >Tipo de Anuncio: </label><br>
                     <select name="tipo" id="tipo" value="${tipo}" required>
@@ -96,6 +96,7 @@
                     <input type="submit" value=" Filtrar " >
                     <input type="reset" value=" Limpar " onclick="getAnnoun()" >
                 </div>
+                <input type="hidden" name="page" value="1">
             </form>
         </div>
 
@@ -119,7 +120,17 @@
 </div>
 
 <footer>
-    ${footer}
+    <p id="ppatrocinios">Patrocinios: </p>
+    <div id="patrocinios">
+        <!--Considerar links para as imagens-->
+        <img src="static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
+        <img src="static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
+        <img src="static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
+        <img src="static/img/dinf_ue.png" alt="Departamento de Informatica UE">
+    </div>
+
+    <hr>
+    <p id="copyright">All content copyright © Gonçalo Barradas and Andre Baião.</p>
 </footer>
 <script>
 

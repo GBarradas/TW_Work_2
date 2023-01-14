@@ -31,7 +31,7 @@
                 <ul>
                     <li><a href="/anuncios">Anuncios</a></li>
                     <li><a href="/submit">Fazer Anuncio</a></li>
-                    <li><a href="/logout" id="user" >Sair </a></li>
+                    <li><a href="/login" id="user" >${ar_user}</a></li>
                 </ul>
             </div>
         </div>
@@ -40,6 +40,18 @@
 <!--Considerar main em vez de div id="main"-->
 <div id="main">
     ${sucess}
+    <div id="mb"  class="box">
+        <img src="/static/img/mb.png" alt="multibanco logo">
+        <div id="mbInfo" >
+            <img src="/static/img/multibanco.png" alt="multibanco">
+            <div><span class="descricao">Entidade: </span><span class="mbinfo">${entidade}</span></div>
+            <div><span class="descricao">Referencia: </span><span class="mbinfo">${ref}</span></div>
+            <div><span class="descricao">Montante: </span><span class="mbinfo">${value}€</span></div>
+
+        </div>
+        <hr>
+    </div>
+
 </div>
 <footer>
     <p id="ppatrocinios">Patrocinios: </p>

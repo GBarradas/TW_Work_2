@@ -16,8 +16,9 @@ public class Anuncio
     private Double preco;
     private String titulo;
     private String descricao;
+    private String img;
 
-    public Anuncio(String tipo, String estado, String anunciante, double preco, String genero, String zona, int aid, Date data, String tipologia,String descricao,String titulo){
+    public Anuncio(String tipo, String estado, String anunciante, double preco, String genero, String zona, int aid, Date data, String tipologia,String descricao,String titulo,String img){
         this.tipo = tipo;
         this.estado = estado;
         this.anunciante = anunciante;
@@ -29,6 +30,7 @@ public class Anuncio
         this.tipologia = tipologia;
         this.descricao = descricao;
         this.titulo = titulo;
+        this.img = img;
     }
     public Anuncio(){
         this.tipo = null;
@@ -79,6 +81,9 @@ public class Anuncio
     public void setContacto(long contacto){
         this.contacto = contacto;
     }
+    public void setImg(String dir){
+        this.img = dir;
+    }
 
     public String getTipo() {
         return this.tipo;
@@ -125,13 +130,16 @@ public class Anuncio
     public long getContacto(){
         return this.contacto;
     }
+    public String getImg(){
+        return this.img;
+    }
 
     public StringBuilder getHtmlAnuncio(){
         StringBuilder sb = new StringBuilder();
         sb.append(
 
             "<div id=\""+getAid()+"\" class=\"anuncio box\" onclick=\"redirectAnuncio("+getAid()+")\" >" +
-                    "<img src=\"/static/img/default.png\"><div class=\"ainfos\">" +
+                    "<img src=\""+getImg()+"\"><div class=\"ainfos\">" +
                     "<h3>"+getTitulo()+"</h3>" +
                     "<div><span class=\"descricao\">Tipo de Alojamento : </span><span>"+getTipologia()+"</span></div>" +
                     "<div><span class=\"descricao\">Genero : </span><span>"+getGenero()+"</span></div>" +

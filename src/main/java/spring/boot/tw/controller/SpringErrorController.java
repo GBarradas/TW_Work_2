@@ -35,12 +35,13 @@ public class SpringErrorController implements ErrorController
             String username = request.getRemoteUser();
             model.addAttribute("ar_user", "Ola, "+username);
         }
-        model.addAttribute("footer", springSecurityController.getFooter());
         if(statusValue == HttpStatus.NOT_FOUND.value()){
             model.addAttribute("h1", "Page Not Found "+statusValue);
+            model.addAttribute("errorImg","<img src=\"/static/img/404.jpeg\" >");
         }
         else if(statusValue == FORBIDDEN.value()){
             model.addAttribute("h1", "Acess Denied \n "+statusValue);
+            model.addAttribute("errorImg","<img src=\"/static/img/403.jpg\" >");
         }
         return "error";
     }
@@ -53,7 +54,6 @@ public class SpringErrorController implements ErrorController
             String username = request.getRemoteUser();
             model.addAttribute("ar_user", "Ola, "+username);
         }
-        model.addAttribute("footer", springSecurityController.getFooter());
         model.addAttribute("h1", "Algo correu mal <br> Anuncio não encontrado");
         return "error";
     }

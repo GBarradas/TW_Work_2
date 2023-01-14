@@ -65,9 +65,14 @@ function redirectAnuncio(aid){
 }
 
 function showAnuncioPage(page){
-    window.location.href = '/anuncios?page='+page;
-}
+    let url = new URL(window.location.href);
+    let paramters = new URLSearchParams(url.search)
+    paramters.delete('page')
+    paramters.set('page',page)
+    window.location.href = '/anuncios?'+paramters.toString()
 
+}
+// para apagar provavelmente
 function showSelectOptions(){
     let form = document.forms["search-form"];
     console.log(form["tipo"].value)
