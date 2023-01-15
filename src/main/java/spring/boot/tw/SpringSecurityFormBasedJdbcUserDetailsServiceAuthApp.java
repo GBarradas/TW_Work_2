@@ -9,7 +9,7 @@ public class SpringSecurityFormBasedJdbcUserDetailsServiceAuthApp {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringSecurityFormBasedJdbcUserDetailsServiceAuthApp.class, args);
                 
-                System.out.println("\nPortal do Alojamento | NEEI\nOPEN:  http://localhost:8080/");
+                System.out.println("\nPortal do Alojamento | NEEI\nOPEN:  https://localhost:8443/");
 	}
 
 }

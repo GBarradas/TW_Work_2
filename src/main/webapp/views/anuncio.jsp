@@ -44,6 +44,7 @@
         <h1>${titulo}</h1>
         <div class="ainfos_unico" >
             <img src="${img_src}" >
+            <div><span class="descricao">Tipo de Anuncio : </span><span>${tipo}</span></div>
                 <div><span class="descricao">Tipo de Alojamento : </span><span>${tipo_alojamento}</span></div>
                 <div><span class="descricao">Genero : </span><span>${genero}</span></div>
                 <div><span class="descricao">Zona : </span><span>${zona}</span></div>
@@ -56,14 +57,16 @@
         ${formMsg}
     </div>
 </div>
+
 <footer>
+
     <p id="ppatrocinios">Patrocinios: </p>
     <div id="patrocinios">
         <!--Considerar links para as imagens-->
-        <img src="static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
-        <img src="static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
-        <img src="static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
-        <img src="static/img/dinf_ue.png" alt="Departamento de Informatica UE">
+        <img src="/static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
+        <img src="/static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
+        <img src="/static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
+        <img src="/static/img/dinf_ue.png" alt="Departamento de Informatica UE">
     </div>
 
     <hr>

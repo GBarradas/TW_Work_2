@@ -119,7 +119,6 @@ public class AnuncioDao {
     {
         List<Anuncio> anuncios = new ArrayList<Anuncio>();
         Statement stmt = dataSource.getConnection().createStatement();
-        System.out.println("select * from anuncios where "+filtros +";");
         ResultSet rs = stmt.executeQuery("select * from anuncios where "+filtros +";");
         while(rs.next()) {
             Anuncio a = new Anuncio();
@@ -144,5 +143,44 @@ public class AnuncioDao {
     {
         Statement stmt = dataSource.getConnection().createStatement();
         stmt.executeUpdate("update anuncios set img='"+dir+"' where aid = "+aid);
+    }
+
+    public void updateState(long  aid, String estado) throws Exception
+    {
+        Statement stmt = dataSource.getConnection().createStatement();
+        stmt.executeUpdate("update anuncios set estado='"+estado+"' where aid="+aid);
+    }
+
+    public List<Anuncio> getAnunciosByUser(String username) throws Exception
+    {
+        List<Anuncio> anuncios = new ArrayList<Anuncio>();
+        Statement stmt = dataSource.getConnection().createStatement();
+        ResultSet rs = stmt.executeQuery("select * from anuncios where anunciante='"+username+"';");
+        while(rs.next()) {
+            Anuncio a = new Anuncio();
+            a.setAid( rs.getLong("aid"));
+            a.setZona(rs.getString("zona"));
+            a.setPreco(rs.getDouble("preco"));
+            a.setGenero(rs.getString("genero"));
+            a.setTipologia(rs.getString("tipologia"));
+            a.setTipo(rs.getString("tipo"));
+            a.setData(rs.getDate("data"));
+            a.setEstado(rs.getString("estado"));
+            a.setAnunciante(rs.getString("anunciante"));
+            a.setDescricao(rs.getString("descricao"));
+            a.setTitulo(rs.getString("titulo"));
+            a.setContacto(rs.getLong("contacto"));
+            a.setImg(rs.getString("img"));
+            anuncios.add(a);
+        }
+        return anuncios;
+    }
+
+    public void removeAnuncio(long aid) throws Exception
+    {
+        Anuncio a = new Anuncio();
+        Statement stmt = dataSource.getConnection().createStatement();
+        stmt.execute("delete from anuncios where aid='"+aid+"';");
+        stmt.execute("delete from mensagens where anuncio='"+aid+"';");
     }
 }

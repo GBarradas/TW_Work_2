@@ -39,4 +39,6 @@ public class UserDao {
         return jdbcTemplate.queryForList("select user_name FROM user", String.class);
     }
 
+
+
 }

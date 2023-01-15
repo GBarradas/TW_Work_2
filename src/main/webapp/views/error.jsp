@@ -36,9 +36,7 @@
     </nav>
 </header>
 <div id="mainError">
-    <h1>ERROR PAGE <br>
-    ${h1}
-    </h1>
+
     ${errorImg}
 </div>
 

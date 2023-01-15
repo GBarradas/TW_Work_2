@@ -151,12 +151,66 @@ public class Anuncio
         );
         return sb;
     }
+    public StringBuilder getHtmlAnuncioUser(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(
+                "<div id=\""+getAid()+"\" class=\"anuncioUser box\" onclick=\"getUserAdd("+getAid()+")\" >"+
+                "    <img src=\""+getImg()+"\">\n" +
+                        "        <div class=\"ainfosAdmin\">" +
+                        "            <h2>"+getTitulo()+"</h2>\n" +
+                        "            <div><span class=\"descricao\">Tipo de Alojamento : </span><span>" + getTipologia()+ "</span></div>\n" +
+                        "            <div><span class=\"descricao\">Genero : </span><span>" + getGenero()+ "</span></div>\n" +
+                        "            <div><span class=\"descricao\">Zona : </span><span>" + getZona() + "</span></div>\n" +
+                        "            <div><span class=\"descricao\">Preço : </span><span>" + getPreco() + " €</span></div>\n" +
+                        "            <div><span class=\"descricao\">Estado : </span><span>" + getEstado()+ "</span></div>\n" +
+                        "            <div><span class=\"descricao\">Data : </span><span>" + getData() + "</span></div>\n" +
+                        "        </div></div>\n"
+        );
+        return sb;
+    }
+    public StringBuilder getHtmlAnuncioAdmin(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(
+            "<div class=\"anuncioAdmin box\" id=\""+getAid()+"\">    <img src=\""+getImg()+"\">\n" +
+                        "        <div class=\"ainfosAdmin\">            <h2>"+getAid()+": "+getTitulo()+ "</h2>\n" +
+                    "            <div><span class=\"descricao\">Tipo de Anuncio : </span><span>"+getTipo()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Tipo de Alojamento : </span><span>"+getTipo()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Genero : </span><span>"+getGenero()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Zona : </span><span>"+getZona()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Preço : </span><span>"+getPreco()+"€</span></div>\n" +
+                        "            <div><span class=\"descricao\">Anunciante : </span><span>"+getAnunciante()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Estado : </span><span>"+getEstado()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Contacto : </span><span>"+getContacto()+"</span></div>\n" +
+                        "            <div><span class=\"descricao\">Data : </span><span>"+getData()+"</span></div>\n" +
+                        "        </div>\n" +
+                        "            <div class=\"aform\">\n " +
+                        "                <form class=\"anun-admin-form\" method=\"post\" action=\"/updateAnuncio\" " +
+                        "                   onsubmit=\"return submitChangeEstado(this)\">\n" +
+                    "                   <input name=\"aid\" type=\"number\" value=\""+getAid()+"\" hidden >  " +
+                    "                    <select name=\"estado\" >");
+        if(getEstado().equals("ativo")){
+            sb.append("<option value=\"ativo\" selected >ativo</option>"+
+                    "<option value=\"inativo\" >inativo</option>" );
+        }
+        else{
+            sb.append("<option value=\"ativo\"  >ativo</option>"+
+                    "<option value=\"inativo\" selected >inativo</option>" );
+        }
+        sb.append( "                       </select>" +
+                "                   <input type=\"submit\" value=\"ENVIAR\" >          " +
+                "<div class=\"formResult\"></div>" +
+                "                </form>\n" +
+                "            </div>\n" +
+                "</div>"
+        );
+        return sb;
+    }
     @Override
     public String toString(){
         DecimalFormat df = new DecimalFormat("#,##0.00€");
 
-        String p =/* "-------------------------------------------------------\n" +
-                "\t Aid: "+ */""+ aid /*+
+        String p = "-------------------------------------------------------\n" +
+                "\t Aid: "+ ""+ aid +
                 "\t Titulo: " + titulo+"\n"+
                 "\t Tipo: " + tipo + "\n"+
                 "\t Estado: "+ estado + "\n"+
@@ -167,7 +221,7 @@ public class Anuncio
                 "\t Tipologia: "+ tipologia + "\n"+
                 "\t Data: " + data + "\n"+
                 "\t Preço: "+ df.format(preco) + "\n"+
-                "\t Descrição: "+descricao+"\n"*/;
+                "\t Descrição: "+descricao+"\n";
 
         return p;
     }

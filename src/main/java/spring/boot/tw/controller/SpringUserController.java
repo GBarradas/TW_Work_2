@@ -6,13 +6,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.boot.tw.dao.AnuncioDao;
 import spring.boot.tw.dao.MensagemDao;
 import spring.boot.tw.dao.UserDao;
+import spring.boot.tw.model.Anuncio;
+import spring.boot.tw.model.Mensagem;
 import spring.boot.tw.model.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Controller
 public class SpringUserController {
@@ -22,11 +28,43 @@ public class SpringUserController {
     private AnuncioDao anuncioDao;
     @Autowired
     private MensagemDao mensagemDao;
+    int pageSize = 4;
 
     @GetMapping("/admin")
-    public String adminPage(Model model) {
-        model.addAttribute("title", "Administrator Control Panel");
-        model.addAttribute("message", "This page demonstrates how to use Spring security");
+    public String adminPage(
+            @RequestParam(value = "estado", defaultValue = "ativo") String estado,
+            @RequestParam(value="page", defaultValue = "1") int page,
+            Model model,HttpServletRequest request) throws SQLException {
+
+
+        List<Anuncio> PesAnuncios=  anuncioDao.getAnunciosByEstado(estado);
+
+        model.addAttribute("ResultNA","&emsp;"+PesAnuncios.size()+" Anuncios Encontrados!");
+        int npages = (int) Math.ceil((double) PesAnuncios.size()/pageSize);
+        model.addAttribute("actPage",page);
+        model.addAttribute("numPages",npages);
+        int start, end;
+        start = (page - 1)*pageSize;
+        end = (page * pageSize);
+        StringBuilder sbA = new StringBuilder();
+        for(int i = start; i < end && i < PesAnuncios.size(); i++){
+            Anuncio a = PesAnuncios.get(i);
+            sbA.append(a.getHtmlAnuncioAdmin());
+        }
+        model.addAttribute("anuncios",sbA);
+        if ((page != 1)) {
+            model.addAttribute("prevPage", page - 1);
+        } else {
+            model.addAttribute("prevPage", 1);
+        }
+        if(page == npages){
+            model.addAttribute("nextPage", npages);
+        }
+        else{
+            model.addAttribute("nextPage", page + 1);
+        }
+        model.addAttribute("lastPage", npages);
+
         return "admin";
     }
 
@@ -70,12 +108,94 @@ public class SpringUserController {
         return "/login";
     }
     @GetMapping("/utilizador")
-    public String paginaUser(Model model, HttpServletRequest request){
+    public String paginaUser(Model model, HttpServletRequest request,
+                             @RequestParam(value="page", defaultValue = "1") int page) throws Exception
+    {
         String username = request.getRemoteUser();
         User u = userDao.getUser(username);
-        //if(u.getRole())
-        model.addAttribute("ar_user", "Ola, "+username);
-        model.addAttribute("sucess","<h1>"+u.getRole()+"</h1>");
+        if(u.getRole().equals("ROLE_ADMIN"))
+            return "redirect:/admin";
+
+        ///////
+        List <Anuncio> pesAnuncios = anuncioDao.getAnunciosByUser(username);
+        model.addAttribute("ResultNA","&emsp;"+pesAnuncios.size()+" Anuncios Encontrados!");
+        model.addAttribute("ResultNA","&emsp;"+pesAnuncios.size()+" Anuncios Encontrados!");
+        int npages = (int) Math.ceil((double) pesAnuncios.size()/pageSize);
+        if(pesAnuncios.size()==0){
+            model.addAttribute("actPage",0);
+        }
+        else{
+            model.addAttribute("actPage",page);
+        }
+        model.addAttribute("numPages",npages);
+        int start, end;
+        start = (page - 1)*pageSize;
+        end = (page * pageSize);
+        StringBuilder sbA = new StringBuilder();
+        for(int i = start; i < end && i < pesAnuncios.size(); i++){
+            Anuncio a = pesAnuncios.get(i);
+            sbA.append(a.getHtmlAnuncioUser());
+        }
+        model.addAttribute("anuncios",sbA);
+        if ((page != 1)) {
+            model.addAttribute("prevPage", page - 1);
+        } else {
+            model.addAttribute("prevPage", 1);
+        }
+        if(page == npages){
+            model.addAttribute("nextPage", npages);
+        }
+        else{
+            model.addAttribute("nextPage", page + 1);
+        }
+        model.addAttribute("lastPage", npages);
+
         return "userPage";
+    }
+    @GetMapping("/utilizador/anuncio")
+    public String AnuncioPage(@RequestParam Long aid,
+                                    Model model, HttpServletRequest request) throws SQLException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Anuncio a = anuncioDao.getAnuncio(aid);
+        String username = request.getRemoteUser();
+        if(a == null ){
+            return "redirect:/error?anuncio";
+        }
+        else if ( !username.equals(a.getAnunciante())){
+            return "redirect:/error?anuncio";
+        }
+        else{
+            model.addAttribute("ar_user", "Ola, "+username);
+            model.addAttribute("msg","<div id=\"delAdMsg\" ></div>");
+            List<Mensagem> msg = mensagemDao.getMensagensAid(aid);
+            StringBuilder sbMss = new StringBuilder();
+            sbMss.append("<hr><div id=\"msg\" > <h2>Mensagens: <span class=\"smaller\"><i class=\"fa-solid fa-messages\"></i>"+msg.size()+"" +
+                    " mensagens recebidas</span></h2>");
+            for(Mensagem m : msg){
+                sbMss.append("<div class=\"box\">" +
+                        "<span class=\"remetente\" >"+m.getRemetente()+" <span class=\"smaller2\"> "+sdf.format(m.getData())+"-"+m.toStringTime()+"</span> : </span>" +
+                        "<span>"+m.getMsg()+"</span></div>");
+            }
+            sbMss.append("</div>");
+            model.addAttribute("sendMsg",sbMss);
+            model.addAttribute("formMsg","<hr> <form  class=\"delAd\" action=\"/deleteAnuncio\" method=\"POST\"" +
+                    "onsubmit=\"return submitDeleteAD(this)\">" +
+                    "<input name= \"aid\" type=\"hidden\" value=\""+a.getAid()+"\" >" +
+                    "<input  type=\"submit\" value=\"Eliminar Anuncio\" > "+
+                    "</form>");
+        }
+        model.addAttribute("tipo", a.getTipo());
+        model.addAttribute("aid",a.getAid());
+        model.addAttribute("titulo",a.getTitulo());
+        model.addAttribute("img_src",a.getImg());
+        model.addAttribute("tipo_alojamento",a.getTipologia());
+        model.addAttribute("genero",a.getGenero());
+        model.addAttribute("zona",a.getZona());
+        model.addAttribute("preco",a.getStringPreco());
+        model.addAttribute("anunciante",a.getAnunciante());
+        model.addAttribute("contacto",a.getContacto());
+        model.addAttribute("detalhes",a.getDescricao());
+
+        return "anuncio";
     }
 }

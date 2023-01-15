@@ -39,7 +39,23 @@
 </header>
 <!--Considerar main em vez de div id="main"-->
 <div id="main">
-    ${sucess}
+    <span class="smaller2" > ${ResultNA}</span>
+    <div id="results">
+        <div class="page active">
+            ${anuncios}
+        </div>
+    </div>
+    <div id="paginacao" class="box">
+        <div class="pagOpt" id="optfp" onclick="showAnuncioUser(1)">«</div>
+        <div class="pagOpt" id="optpp" onclick="showAnuncioUser(${prevPage})">&lt;</div>
+        <div class="pagInfo">
+            Pagina <span id="actpage">${actPage}</span> de
+            <span id="npages">${numPages}</span><br>
+
+        </div>
+        <div class="pagOpt" id="optnp" onclick="showAnuncioUser(${nextPage})"> &gt; </div>
+        <div class="pagOpt" id="optlp" onclick="showAnuncioUser(${lastPage})">»</div>
+    </div>
 </div>
 <footer>
     <p id="ppatrocinios">Patrocinios: </p>

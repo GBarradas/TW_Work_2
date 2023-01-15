@@ -109,38 +109,7 @@ public class SpringAnunciosController {
 
         return "anuncios";
     }
-    @GetMapping("registerProcura")
-    public String temporaryFunction(Model model, HttpServletRequest request) throws Exception{
-
-        if(request.getUserPrincipal() == null){
-            model.addAttribute("ar_user", "Area Reservada");
-        }
-        else{
-            String username = request.getRemoteUser();
-            model.addAttribute("ar_user", "Ola, "+username);
-        }
-        HttpURLConnection cnt = (HttpURLConnection) new URL(
-                "http://alunos.di.uevora.pt/tweb/t2/mbref4payment?amount=10.0"
-        ).openConnection();
-        cnt.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-        cnt.setRequestProperty("Accept", "application/json");
-        cnt.setRequestMethod("GET");
-        cnt.setDoOutput(true);
-        try{
-            BufferedReader ri = new BufferedReader(new InputStreamReader(cnt.getInputStream()));
-            String response = ri.readLine();
-            JSONObject json = new JSONObject(response);
-            model.addAttribute("entidade",json.getString("mb_entity"));
-            model.addAttribute("ref",json.getString("mb_reference"));
-            model.addAttribute("value",json.getString("mb_amount"));
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        model.addAttribute("sucess","<div class=\"sucess\"><i class=\"fa-solid fa-thumbs-up\"></i> Anuncio Registado com ID: 15</div>");
-        return "sucess";
-    }
+    
 
     @PostMapping("/registerProcura")
     public String newAnuncioProcura(
@@ -181,6 +150,32 @@ public class SpringAnunciosController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(request.getUserPrincipal() == null){
+            model.addAttribute("ar_user", "Area Reservada");
+        }
+        else{
+            model.addAttribute("ar_user", "Ola, "+username);
+        }
+        HttpURLConnection cnt = (HttpURLConnection) new URL(
+                "http://alunos.di.uevora.pt/tweb/t2/mbref4payment?amount=10.0"
+        ).openConnection();
+        cnt.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        cnt.setRequestProperty("Accept", "application/json");
+        cnt.setRequestMethod("GET");
+        cnt.setDoOutput(true);
+        try{
+            BufferedReader ri = new BufferedReader(new InputStreamReader(cnt.getInputStream()));
+            String response = ri.readLine();
+            JSONObject json = new JSONObject(response);
+            model.addAttribute("entidade",json.getString("mb_entity"));
+            model.addAttribute("ref",json.getString("mb_reference"));
+            model.addAttribute("value",json.getString("mb_amount"));
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        model.addAttribute("sucess","<div class=\"sucess\"><i class=\"fa-solid fa-thumbs-up\"></i> Anuncio Registado com ID:"+aid+"</div>");
 
 
         //"<div class=\"sucess\"><i class=\"fa-solid fa-thumbs-up\"></i> Anuncio Registado com ID: "+aid +"</div>";
@@ -201,6 +196,9 @@ public class SpringAnunciosController {
         else if (a.getEstado().equals("inativo")&&(username == null || !username.equals(a.getAnunciante()))){
             mav = new ModelAndView("redirect:/error?anuncio");
             return mav;
+        }
+        else if(username != null && username.equals(a.getAnunciante())){
+            return new ModelAndView("redirect:/utilizador/anuncio?aid="+aid);
         }
 
         if(send != null){
@@ -238,7 +236,7 @@ public class SpringAnunciosController {
                             "</form>");
             mav.addObject("formMsg",sbForm);
         }
-
+        mav.addObject("tipo", a.getTipo());
         mav.addObject("aid",a.getAid());
         mav.addObject("titulo",a.getTitulo());
         mav.addObject("img_src",a.getImg());
@@ -290,7 +288,34 @@ public class SpringAnunciosController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(request.getUserPrincipal() == null){
+            model.addAttribute("ar_user", "Area Reservada");
+        }
+        else{
+            model.addAttribute("ar_user", "Ola, "+username);
+        }
+        HttpURLConnection cnt = (HttpURLConnection) new URL(
+                "http://alunos.di.uevora.pt/tweb/t2/mbref4payment?amount=10.0"
+        ).openConnection();
+        cnt.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        cnt.setRequestProperty("Accept", "application/json");
+        cnt.setRequestMethod("GET");
+        cnt.setDoOutput(true);
+        try{
+            BufferedReader ri = new BufferedReader(new InputStreamReader(cnt.getInputStream()));
+            String response = ri.readLine();
+            JSONObject json = new JSONObject(response);
+            model.addAttribute("entidade",json.getString("mb_entity"));
+            model.addAttribute("ref",json.getString("mb_reference"));
+            model.addAttribute("value",json.getString("mb_amount"));
 
-        return ssc.defaultPage(model,request, "<div class=\"sucess\"><i class=\"fa-solid fa-thumbs-up\"></i> Anuncio Registado com ID: "+aid +"</div>");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        model.addAttribute("sucess","<div class=\"sucess\"><i class=\"fa-solid fa-thumbs-up\"></i> Anuncio Registado com ID: "+aid+"</div>");
+
+        return "sucess";
     }
+
 }

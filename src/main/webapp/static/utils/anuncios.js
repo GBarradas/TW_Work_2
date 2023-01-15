@@ -1,4 +1,5 @@
 import ("https://kit.fontawesome.com/b870a66f93.js")
+import("https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
 
 function showHide(a){
     a.classList.toggle("change");
@@ -72,8 +73,100 @@ function showAnuncioPage(page){
     window.location.href = '/anuncios?'+paramters.toString()
 
 }
+function showAnuncioUser(page){
+    let url = new URL(window.location.href);
+    window.location.href = '/utilizador?page='+page
+
+}
+function showAnuncioAdmin(page){
+    let url = new URL(window.location.href);
+    let paramters = new URLSearchParams(url.search)
+    paramters.delete('page')
+    paramters.set('page',page)
+    window.location.href = '/admin?'+paramters.toString()
+
+}
 // para apagar provavelmente
 function showSelectOptions(){
-    let form = document.forms["search-form"];
-    console.log(form["tipo"].value)
+    let url = new URL(window.location.href);
+    let paramters = new URLSearchParams(url.search)
+    let value = paramters.get("estado")
+    if(value == null)
+        return
+    let form = document.forms["adminAnunForm"];
+    form["estado"].value = value
+
+}
+function submitChangeEstado(form){
+    let xhttp = new XMLHttpRequest()
+    xhttp.onload = function (){
+        let res = xhttp.responseText
+        if(res == 'ok'){
+            let div = form.querySelector(".formResult")
+            div.classList.toggle('sucess')
+            div.innerHTML=" " +
+                "<i class=\"fa-solid fa-thumbs-up\"></i> " +
+                "Estado Alterado"
+            setTimeout(() => {  form.querySelector(".formResult").classList.toggle('sucess');
+                form.querySelector(".formResult").innerHTML="" }, 5000);
+            setTimeout(()=>{
+                let aid = form["aid"].value;
+                document.getElementById(aid).remove()
+            },6000)
+
+
+        }
+        else{
+
+        }
+    }
+    xhttp.open(form.method, form.action, true)
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    let args = ''
+    for(i of form){
+        if( i.type == 'submit'|| i.type == 'reset') {       // este if é para ignorar estes inputs
+            continue;
+        }
+        args += i.name + '='+ i.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')+'&';
+    }
+    xhttp.send((args.slice(0,-1)))
+    return false;
+}
+function submitDeleteAD(form){
+    let xhttp = new XMLHttpRequest()
+    xhttp.onload = function (){
+        let res = xhttp.responseText
+        if(res == 'ok'){
+            let div = document.getElementById("delAdMsg")
+            div.classList.toggle('sucess')
+            div.innerHTML=" " +
+                "<i class=\"fa-solid fa-trash\"></i> " +
+                "Anuncio Eliminado"
+            setTimeout(() => {  document.getElementById("delAdMsg").classList.toggle('sucess');
+                document.getElementById("delAdMsg").innerHTML="" }, 5000);
+            setTimeout(()=>{
+                window.location.href="/utilizador"
+            },6000)
+
+
+        }
+        else{
+
+        }
+    }
+    xhttp.open(form.method, form.action, true)
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    let args = ''
+    for(i of form){
+        if( i.type == 'submit'|| i.type == 'reset') {       // este if é para ignorar estes inputs
+            continue;
+        }
+        args += i.name + '='+ i.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')+'&';
+    }
+    xhttp.send((args.slice(0,-1)))
+    return false;
+}
+
+function getUserAdd(aid){
+    window.location.href="/utilizador/anuncio?aid="+aid
 }
