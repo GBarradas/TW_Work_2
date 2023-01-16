@@ -31,7 +31,7 @@
 			<div id="options" >
 				<ul>
 					<li><a href="/anuncios">Anuncios</a></li>
-					<li><a href="/submit">Fazer Anuncio</a></li>
+					<li><a href="/admin">Gerir Utilizadores</a></li>
 					<li><a href="/logout" id="user" >Logout</a></li>
 				</ul>
 			</div>
@@ -70,10 +70,10 @@
 	<p id="ppatrocinios">Patrocinios: </p>
 	<div id="patrocinios">
 		<!--Considerar links para as imagens-->
-		<img src="static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
-		<img src="static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
-		<img src="static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
-		<img src="static/img/dinf_ue.png" alt="Departamento de Informatica UE">
+		<img src="/static/img/logotipo_Uevora_pt_branco.png" alt="Universidade de Évora">
+		<img src="/static/img/LOGOEVORA_CORES.webp" alt="Camara Mununicipal de Évora">
+		<img src="/static/img/aaue.png" alt="Associação Academica da Universidade de Évora">
+		<img src="/static/img/dinf_ue.png" alt="Departamento de Informatica UE">
 	</div>
 
 	<hr>

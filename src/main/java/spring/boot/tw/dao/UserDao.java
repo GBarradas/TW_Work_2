@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import spring.boot.tw.model.User;
 import spring.boot.tw.rowmapper.UserRowMapper;
 
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -15,11 +19,34 @@ public class UserDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private DataSource dataSource;
 
     public User getUser(final String username) {
         return jdbcTemplate.queryForObject(
                 "select u.username user_name, u.password user_pass, email user_email, ur.role user_role from user_tw u, user_role ur where u.username = ? and u.username = ur.username",
                 new String[]{username}, new UserRowMapper());
+    }
+    public int numAnuncios(String username) throws Exception
+    {
+        String sql = "select count(*) as n from anuncios where anunciante ilike '"+username+"';";
+        Statement stmt = dataSource.getConnection().createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        rs.next();
+        return rs.getInt("n");
+    }
+    public List<User> getAllUsers() throws Exception
+    {
+        List<User> us = new ArrayList<User>();
+        String sql = "select username from user_tw ";
+        Statement stmt = dataSource.getConnection().createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while(rs.next()){
+            us.add(getUser(rs.getString("username")));
+        }
+        return us;
+
+
     }
 
     public void saveUser(final User u) {

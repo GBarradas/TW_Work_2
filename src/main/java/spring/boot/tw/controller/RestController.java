@@ -12,6 +12,7 @@ import spring.boot.tw.model.Anuncio;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Statement;
+import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
@@ -37,21 +38,32 @@ public class RestController {
     }
     @PostMapping("/deleteAnuncio")
     public String deleteAnuncio(
-            @RequestParam(name="aid") long aid
-            //HttpServletRequest request
+            @RequestParam(name="aid") long aid,
+            HttpServletRequest request
     ) throws Exception
     {
         System.out.println(aid);
-        //String username = request.getRemoteUser();
+        String username = request.getRemoteUser();
         Anuncio a = anuncioDao.getAnuncio(aid);
         if(a == null){
             return "erro";
         }
         String aname = a.getAnunciante();
-        //if(!username.equals(aname)){
-         //   return "erro";
-        //}
+        if(!username.equals(aname)){
+            return "erro";
+        }
         anuncioDao.removeAnuncio(aid);
         return "ok";
     }
+    @PostMapping("/deleteUser")
+    public String deleteUser(
+            @RequestParam(name = "user") String user
+    ) throws Exception {
+        List<Anuncio> ads =anuncioDao.getAnunciosByUser(user);
+        for(Anuncio a : ads)
+            anuncioDao.removeAnuncio(a.getAid());
+        
+        return "ok";
+    }
+
 }

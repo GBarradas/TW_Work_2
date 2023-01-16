@@ -83,7 +83,9 @@ function showAnuncioAdmin(page){
     let paramters = new URLSearchParams(url.search)
     paramters.delete('page')
     paramters.set('page',page)
-    window.location.href = '/admin?'+paramters.toString()
+    console.log(paramters.toString())
+    window.location.href = url.pathname+"?"+paramters.toString()
+    console.log(url)
 
 }
 // para apagar provavelmente
