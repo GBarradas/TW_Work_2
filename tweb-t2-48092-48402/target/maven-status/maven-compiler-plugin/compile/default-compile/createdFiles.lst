@@ -1,0 +1,16 @@
+spring/boot/tw/rowmapper/UserRowMapper.class
+spring/boot/tw/controller/SpringUserController.class
+spring/boot/tw/config/DatabaseConfig.class
+spring/boot/tw/controller/SpringErrorController.class
+spring/boot/tw/controller/SpringSecurityController.class
+spring/boot/tw/SpringSecurityFormBasedJdbcUserDetailsServiceAuthApp.class
+spring/boot/tw/model/Mensagem.class
+spring/boot/tw/controller/RestController.class
+spring/boot/tw/model/Anuncio.class
+spring/boot/tw/model/User.class
+spring/boot/tw/dao/AnuncioDao.class
+spring/boot/tw/service/UserAuthService.class
+spring/boot/tw/controller/SpringAnunciosController.class
+spring/boot/tw/dao/MensagemDao.class
+spring/boot/tw/config/SecurityConfig.class
+spring/boot/tw/dao/UserDao.class

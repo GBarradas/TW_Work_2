@@ -62,7 +62,7 @@ public class RestController {
         List<Anuncio> ads =anuncioDao.getAnunciosByUser(user);
         for(Anuncio a : ads)
             anuncioDao.removeAnuncio(a.getAid());
-        
+        userDao.deleteUser(user);
         return "ok";
     }
 

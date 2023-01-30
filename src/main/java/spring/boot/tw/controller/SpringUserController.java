@@ -49,20 +49,27 @@ public class SpringUserController {
         start = (page - 1)*pageSize;
         end = (page * pageSize);
         StringBuilder sb = new StringBuilder();
-        sb.append("<table><thead><tr>" +
-                "<th>User Name</th><th>Email</th><th>Role</th><th>Nº Anuncios</th>" +
-                "<th>Ver</th><th>Eliminar</th></tr></theda><tbody>");
+        sb.append("<table><thead>" +
+                "<tr><th colspan=\"3\" style=\"border:none;\" > </th><th colspan=\"3\" style=\"border:none;text-align:center;\"  >Nº Anuncio</th>" +
+                "<th  colspan=\"2\" style=\"border:none;\"  ></th></tr><tr style=\"background-color: transparent !important;\" >" +
+                "<th>User Name</th><th>Email</th><th>Role</th><th style=\"text-align:center;\" >Total</th>" +
+                "<th style=\"text-align:center;\" >Ativos</th>" +
+                "<th style=\"text-align:center;\" >Inativos</th>" +
+                "<th style=\"text-align:center;\" >Ver</th><th style=\"text-align:center;\" >Eliminar</th></tr></theda><tbody>");
         for(int i = start; i < end && i < Users.size(); i++){
             User u = Users.get(i);
-            sb.append("<tr>" +
+            sb.append(
+                    "<tr id=\""+u.getUsername()+"\" >" +
                     "<td>"+u.getUsername()+"</td>" +
-                    "<td>"+u.getEmail()+"</td>" +
+                    "<td> <a href=\"mailto:"+u.getEmail()+"\" > "+u.getEmail()+"</a></td>" +
                     "<td>"+u.getRole().substring(5)+"</td>" +
-                    "<td>"+userDao.numAnuncios(u.getUsername())+"</td>" +
+                    "<td style=\"text-align: center;\" >"+userDao.numAnuncios(u.getUsername())+"</td>" +
+                    "<td style=\"text-align: center;\" >"+userDao.numAnunciosEstado(u.getUsername(),"ativo")+"</td>" +
+                    "<td style=\"text-align: center;\" >"+userDao.numAnunciosEstado(u.getUsername(),"inativo")+"</td>" +
                     "<td style=\"text-align: center;\" ><a href=\"/admin/ads/"+u.getUsername()+"\"  style=\"\n" +
                     "    color: black;\n" +
                     "\" ><i class=\"fa-solid fa-magnifying-glass-arrow-right\"></i></a></td>" +
-                    "<td style=\"text-align: center;\"><form action=\"/deleteUser\" method=\"post\" > " +
+                    "<td style=\"text-align: center;\"><form action=\"/deleteUser\" method=\"post\" onsubmit=\"return submitFormToDeleteUser(this)\" > " +
                     "<input type=\"hidden\" name=\"user\" value=\""+u.getUsername()+ "\" >" +
                     "<button style=\"\n" +
                     "    border: none;\n" +
@@ -104,7 +111,12 @@ public class SpringUserController {
 
         model.addAttribute("ResultNA","&emsp;"+PesAnuncios.size()+" Anuncios Encontrados!");
         int npages = (int) Math.ceil((double) PesAnuncios.size()/pageSize);
-        model.addAttribute("actPage",page);
+        if(PesAnuncios.size() == 0){
+            model.addAttribute("actPage",0);
+        }
+        else{
+            model.addAttribute("actPage",page);
+        }
         model.addAttribute("numPages",npages);
         int start, end;
         start = (page - 1)*pageSize;
@@ -143,7 +155,12 @@ public class SpringUserController {
 
         model.addAttribute("ResultNA","&emsp;"+PesAnuncios.size()+" Anuncios Encontrados!");
         int npages = (int) Math.ceil((double) PesAnuncios.size()/pageSize);
-        model.addAttribute("actPage",page);
+        if(PesAnuncios.size() == 0){
+            model.addAttribute("actPage",0);
+        }
+        else{
+            model.addAttribute("actPage",page);
+        }
         model.addAttribute("numPages",npages);
         int start, end;
         start = (page - 1)*pageSize;
@@ -216,7 +233,7 @@ public class SpringUserController {
         String username = request.getRemoteUser();
         User u = userDao.getUser(username);
         if(u.getRole().equals("ROLE_ADMIN"))
-            return "redirect:/admin";
+            return "redirect:/admin/anuncios";
 
         ///////
         List <Anuncio> pesAnuncios = anuncioDao.getAnunciosByUser(username);
