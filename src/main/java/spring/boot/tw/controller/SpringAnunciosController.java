@@ -112,7 +112,7 @@ public class SpringAnunciosController {
     
 
     @PostMapping("/registerProcura")
-    public String newAnuncioProcura(
+    public synchronized String newAnuncioProcura(
             @RequestParam String titulo,
             @RequestParam String genero,
             @RequestParam long contacto,
@@ -120,7 +120,7 @@ public class SpringAnunciosController {
             @RequestParam Double preco,
             @RequestParam String zona,
             @RequestParam String detalhes,
-            @RequestParam MultipartFile image,
+            @RequestParam(required = false) MultipartFile image,
             Model model,
             HttpServletRequest request
     ) throws Exception {
@@ -140,16 +140,19 @@ public class SpringAnunciosController {
         a.setContacto(contacto);
         String dir = "src/main/webapp/static/anuncios/img/";
         long aid = anuncioDao.saveAnuncio(a);
-        try {
-            byte[] bytes = image.getBytes();
-            File img = new File(dir+"img_"+aid+".png");
-            System.out.println(dir);
-            FileOutputStream fos = new FileOutputStream(img);
-            fos.write(bytes);
-            anuncioDao.updateImg( aid,("/static/anuncios/img/"+"img_"+aid+".png" ));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!image.isEmpty()){
+            try {
+                byte[] bytes = image.getBytes();
+                File img = new File(dir+"img_"+aid+".png");
+                System.out.println(dir);
+                FileOutputStream fos = new FileOutputStream(img);
+                fos.write(bytes);
+                anuncioDao.updateImg( aid,("/static/anuncios/img/"+"img_"+aid+".png" ));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
         if(request.getUserPrincipal() == null){
             model.addAttribute("ar_user", "Area Reservada");
         }
@@ -251,7 +254,7 @@ public class SpringAnunciosController {
     }
 
     @PostMapping("/registerOferta")
-    public String newAnuncioOferta(
+    public synchronized String newAnuncioOferta(
             @RequestParam String titulo,
             @RequestParam String genero,
             @RequestParam long contacto,
@@ -279,14 +282,17 @@ public class SpringAnunciosController {
         a.setContacto(contacto);
         long aid = anuncioDao.saveAnuncio(a);
         String dir = "src/main/webapp/static/anuncios/img/";
-        try {
-            byte[] bytes = image.getBytes();
-            File img = new File(dir+"img_"+aid+".png");
-            FileOutputStream fos = new FileOutputStream(img);
-            fos.write(bytes);
-            anuncioDao.updateImg( aid,("/static/anuncios/img/"+"img_"+aid+".png" ));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!image.isEmpty()){
+            try {
+                byte[] bytes = image.getBytes();
+                File img = new File(dir+"img_"+aid+".png");
+                System.out.println(dir);
+                FileOutputStream fos = new FileOutputStream(img);
+                fos.write(bytes);
+                anuncioDao.updateImg( aid,("/static/anuncios/img/"+"img_"+aid+".png" ));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if(request.getUserPrincipal() == null){
             model.addAttribute("ar_user", "Area Reservada");

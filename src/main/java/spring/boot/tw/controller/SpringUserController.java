@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 public class SpringUserController {
@@ -31,17 +33,134 @@ public class SpringUserController {
     int pageSize = 4;
 
     @GetMapping("/admin")
-    public String adminPage(
+    public String AdminUserPage(
+            Model model,
+            HttpServletRequest request,
+            @RequestParam(name = "page",defaultValue = "1") int page
+    ) throws Exception
+    {
+
+        List<User> Users = userDao.getAllUsers();
+         model.addAttribute("ResultNA","&emsp;"+Users.size()+" Utilizadores Encontrados!");
+        int npages = (int) Math.ceil((double) Users.size()/pageSize);
+        model.addAttribute("actPage",page);
+        model.addAttribute("numPages",npages);
+        int start, end;
+        start = (page - 1)*pageSize;
+        end = (page * pageSize);
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table><thead>" +
+                "<tr><th colspan=\"3\" style=\"border:none;\" > </th><th colspan=\"3\" style=\"border:none;text-align:center;\"  >Nº Anuncio</th>" +
+                "<th  colspan=\"2\" style=\"border:none;\"  ></th></tr><tr style=\"background-color: transparent !important;\" >" +
+                "<th>User Name</th><th>Email</th><th>Role</th><th style=\"text-align:center;\" >Total</th>" +
+                "<th style=\"text-align:center;\" >Ativos</th>" +
+                "<th style=\"text-align:center;\" >Inativos</th>" +
+                "<th style=\"text-align:center;\" >Ver</th><th style=\"text-align:center;\" >Eliminar</th></tr></theda><tbody>");
+        for(int i = start; i < end && i < Users.size(); i++){
+            User u = Users.get(i);
+            sb.append(
+                    "<tr id=\""+u.getUsername()+"\" >" +
+                    "<td>"+u.getUsername()+"</td>" +
+                    "<td> <a href=\"mailto:"+u.getEmail()+"\" > "+u.getEmail()+"</a></td>" +
+                    "<td>"+u.getRole().substring(5)+"</td>" +
+                    "<td style=\"text-align: center;\" >"+userDao.numAnuncios(u.getUsername())+"</td>" +
+                    "<td style=\"text-align: center;\" >"+userDao.numAnunciosEstado(u.getUsername(),"ativo")+"</td>" +
+                    "<td style=\"text-align: center;\" >"+userDao.numAnunciosEstado(u.getUsername(),"inativo")+"</td>" +
+                    "<td style=\"text-align: center;\" ><a href=\"/admin/ads/"+u.getUsername()+"\"  style=\"\n" +
+                    "    color: black;\n" +
+                    "\" ><i class=\"fa-solid fa-magnifying-glass-arrow-right\"></i></a></td>" +
+                    "<td style=\"text-align: center;\"><form action=\"/deleteUser\" method=\"post\" onsubmit=\"return submitFormToDeleteUser(this)\" > " +
+                    "<input type=\"hidden\" name=\"user\" value=\""+u.getUsername()+ "\" >" +
+                    "<button style=\"\n" +
+                    "    border: none;\n" +
+                    "    font-size: 1em;\n" +
+                    "    background: none;\n" +
+                    "\" type=\"submit\" ><i class=\"fa-solid fa-trash\"></i> </button>  </form></td>" +
+                    "</tr>");
+        }
+        sb.append("</tbody></table>");
+        model.addAttribute("table",sb);
+
+        if ((page != 1)) {
+            model.addAttribute("prevPage", page - 1);
+        } else {
+            model.addAttribute("prevPage", 1);
+        }
+        if(page == npages){
+            model.addAttribute("nextPage", npages);
+        }
+        else{
+            model.addAttribute("nextPage", page + 1);
+        }
+        model.addAttribute("lastPage", npages);
+
+        return "adminMain";
+    }
+    @GetMapping("/admin/ads/{user}")
+    public String adminAnunciosUserPage(
+            @PathVariable(value = "user") String user,
             @RequestParam(value = "estado", defaultValue = "ativo") String estado,
             @RequestParam(value="page", defaultValue = "1") int page,
-            Model model,HttpServletRequest request) throws SQLException {
+            Model model,HttpServletRequest request) throws Exception {
+
+        String filtros = "estado = '"+estado+"'";
+        if(user == null)
+            return "redirect:/error?anuncio";
+        filtros += "AND anunciante ilike '"+user+"'";
+        List<Anuncio> PesAnuncios=  anuncioDao.getAnunciosFiltro(filtros);
+
+        model.addAttribute("ResultNA","&emsp;"+PesAnuncios.size()+" Anuncios Encontrados!");
+        int npages = (int) Math.ceil((double) PesAnuncios.size()/pageSize);
+        if(PesAnuncios.size() == 0){
+            model.addAttribute("actPage",0);
+        }
+        else{
+            model.addAttribute("actPage",page);
+        }
+        model.addAttribute("numPages",npages);
+        int start, end;
+        start = (page - 1)*pageSize;
+        end = (page * pageSize);
+        StringBuilder sbA = new StringBuilder();
+        for(int i = start; i < end && i < PesAnuncios.size(); i++){
+            Anuncio a = PesAnuncios.get(i);
+            sbA.append(a.getHtmlAnuncioAdmin());
+        }
+        model.addAttribute("anuncios",sbA);
+        if ((page != 1)) {
+            model.addAttribute("prevPage", page - 1);
+        } else {
+            model.addAttribute("prevPage", 1);
+        }
+        if(page == npages){
+            model.addAttribute("nextPage", npages);
+        }
+        else{
+            model.addAttribute("nextPage", page + 1);
+        }
+        model.addAttribute("lastPage", npages);
+
+        return "admin";
+    }
+
+    @GetMapping("/admin/anuncios")
+    public String adminAnunciosPage(
+            @RequestParam(value = "estado", defaultValue = "ativo") String estado,
+            @RequestParam(value = "user",required = false) String user,
+            @RequestParam(value="page", defaultValue = "1") int page,
+            Model model,HttpServletRequest request) throws Exception {
 
 
         List<Anuncio> PesAnuncios=  anuncioDao.getAnunciosByEstado(estado);
 
         model.addAttribute("ResultNA","&emsp;"+PesAnuncios.size()+" Anuncios Encontrados!");
         int npages = (int) Math.ceil((double) PesAnuncios.size()/pageSize);
-        model.addAttribute("actPage",page);
+        if(PesAnuncios.size() == 0){
+            model.addAttribute("actPage",0);
+        }
+        else{
+            model.addAttribute("actPage",page);
+        }
         model.addAttribute("numPages",npages);
         int start, end;
         start = (page - 1)*pageSize;
@@ -114,7 +233,7 @@ public class SpringUserController {
         String username = request.getRemoteUser();
         User u = userDao.getUser(username);
         if(u.getRole().equals("ROLE_ADMIN"))
-            return "redirect:/admin";
+            return "redirect:/admin/anuncios";
 
         ///////
         List <Anuncio> pesAnuncios = anuncioDao.getAnunciosByUser(username);

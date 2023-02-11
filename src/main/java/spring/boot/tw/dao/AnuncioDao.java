@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import spring.boot.tw.model.Anuncio;
 
 import javax.sql.*;
+import java.io.File;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -17,6 +18,8 @@ public class AnuncioDao {
     private DataSource dataSource;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    String dir = "src/main/webapp";
 
     public List<Anuncio> getAnunciosByEstado(String estado) throws SQLException {
         List<Anuncio> anuncios = new LinkedList<Anuncio>();
@@ -95,7 +98,7 @@ public class AnuncioDao {
         }
     }
 
-    public long saveAnuncio(Anuncio a){
+    public synchronized long saveAnuncio(Anuncio a){
 
         String sql = "insert into anuncios(tipo, estado, anunciante, preco, genero, zona, data, tipologia,titulo,descricao, contacto) values('"
                 + a.getTipo() +
@@ -178,7 +181,13 @@ public class AnuncioDao {
 
     public void removeAnuncio(long aid) throws Exception
     {
-        Anuncio a = new Anuncio();
+        Anuncio a = getAnuncio(aid);
+        String imgDir = a.getImg();
+        if(!imgDir.equals("/static/img/default.png")){
+            System.out.println(dir +imgDir);
+            File file = new File(dir +imgDir);
+            file.delete();
+        }
         Statement stmt = dataSource.getConnection().createStatement();
         stmt.execute("delete from anuncios where aid='"+aid+"';");
         stmt.execute("delete from mensagens where anuncio='"+aid+"';");
